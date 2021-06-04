@@ -1,0 +1,8 @@
+{
+    "env" : {
+        "email" : "duka@gmail.com",
+        "password" : "pass1234",
+        "profName" : "Jankovski",
+        "profLastName" : "Djovski"
+    }
+}

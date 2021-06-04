@@ -1,0 +1,498 @@
+{
+	"info": {
+		"_postman_id": "b83f3e2e-4448-4660-bc52-db94808a5bd3",
+		"name": "GradebookBorota",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var email = \"Bura\" + _.random(1, 1000000) + \"@example.com\"",
+							"pm.environment.set(\"email\", email);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.environment.set(\"userid\", Number(jsonData.user.id))",
+							"pm.environment.set(\"token\", jsonData.token)",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first_name\": \"{{firstname}}\",\n    \"last_name\": \"{{lastname}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\",\n    \"password_confirmation\": \"{{passwordconfirm}}\",\n    \"terms_conditions\": \"{{termsandconditions}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gradebook-api.vivifyideas.com/api/register",
+					"protocol": "https",
+					"host": [
+						"gradebook-api",
+						"vivifyideas",
+						"com"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.environment.set(\"token\", jsonData.token)",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gradebook-api.vivifyideas.com/api/login",
+					"protocol": "https",
+					"host": [
+						"gradebook-api",
+						"vivifyideas",
+						"com"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add gradebook",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var gradebookname = \"Bura\" + _.random(1, 1000000)",
+							"pm.environment.set(\"gradebookname\", gradebookname);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.environment.set(\"gradebookid\", jsonData.id)",
+							"pm.environment.set(\"postaojerazredniid\", jsonData.professor_id)",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{gradebookname}}\",\n    \"professor_id\": 84\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gradebook-api.vivifyideas.com/api/gradebooks/store",
+					"protocol": "https",
+					"host": [
+						"gradebook-api",
+						"vivifyideas",
+						"com"
+					],
+					"path": [
+						"api",
+						"gradebooks",
+						"store"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add gradebook with proffesor whos already razredni staresina",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{gradebookname}}\",\n    \"professor_id\": {{postaojerazredniid}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gradebook-api.vivifyideas.com/api/gradebooks/store",
+					"protocol": "https",
+					"host": [
+						"gradebook-api",
+						"vivifyideas",
+						"com"
+					],
+					"path": [
+						"api",
+						"gradebooks",
+						"store"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add gradebook without token",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var gradebookname = \"Bura\" + _.random(1, 1000000)",
+							"pm.environment.set(\"gradebookname\", gradebookname);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{gradebookname}}\",\n    \"professor_id\": 84\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gradebook-api.vivifyideas.com/api/gradebooks/store",
+					"protocol": "https",
+					"host": [
+						"gradebook-api",
+						"vivifyideas",
+						"com"
+					],
+					"path": [
+						"api",
+						"gradebooks",
+						"store"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add gradebook without name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"\",\n    \"professor_id\": 84\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gradebook-api.vivifyideas.com/api/gradebooks/store",
+					"protocol": "https",
+					"host": [
+						"gradebook-api",
+						"vivifyideas",
+						"com"
+					],
+					"path": [
+						"api",
+						"gradebooks",
+						"store"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add gradebook with 1 letter name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"a\",\n    \"professor_id\": 84\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gradebook-api.vivifyideas.com/api/gradebooks/store",
+					"protocol": "https",
+					"host": [
+						"gradebook-api",
+						"vivifyideas",
+						"com"
+					],
+					"path": [
+						"api",
+						"gradebooks",
+						"store"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add gradebook with 256 letter name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaz\",\n    \"professor_id\": 84\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gradebook-api.vivifyideas.com/api/gradebooks/store",
+					"protocol": "https",
+					"host": [
+						"gradebook-api",
+						"vivifyideas",
+						"com"
+					],
+					"path": [
+						"api",
+						"gradebooks",
+						"store"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
